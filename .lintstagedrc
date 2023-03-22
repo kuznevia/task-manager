@@ -1,4 +1,4 @@
 {
   "*.(js|jsx|ts|tsx|css|md|json)": "prettier --write",
-  "*.(js|jsx|ts|tsx)": ["eslint --fix", "tsc-files --noEmit import-images.d.ts"]
+  "*.(js|jsx|ts|tsx)": ["eslint --fix", "tsc-files --noEmit"]
 }
