@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "type-check": "tsc",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install client/.husky"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.2",

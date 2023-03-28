@@ -1,0 +1,4 @@
+{
+  "*.(js|jsx|ts|tsx|css|md|json)": "cd client && prettier --write",
+  "*.(js|jsx|ts|tsx)": ["cd client && eslint --fix", "cd client && tsc-files --noEmit"]
+}
