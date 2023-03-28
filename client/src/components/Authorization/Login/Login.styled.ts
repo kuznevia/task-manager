@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 
 export const LoginWrapper = styled.div`
-  height: 100vh;
-  width: 100%;
-  max-width: 1240px;
+  height: 100%;
   display: flex;
+  gap: 10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
