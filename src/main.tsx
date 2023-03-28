@@ -1,7 +1,8 @@
 import './index.css';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { Login } from 'components/Login/Login';
+import { Login } from 'components/Authorization/Login/Login';
+import { RestorePassword } from 'components/Authorization/RestorePassword/RestorePassword';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/restorePassword" element={<RestorePassword />} />
         </Routes>
       </ChakraProvider>
     </BrowserRouter>
