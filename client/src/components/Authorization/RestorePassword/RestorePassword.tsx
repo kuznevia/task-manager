@@ -23,7 +23,7 @@ export const RestorePassword = () => {
 
   return (
     <LoginWrapper>
-      <Heading mb="25px">Restore password</Heading>
+      <Heading>Restore password</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
           <Input

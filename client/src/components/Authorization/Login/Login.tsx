@@ -33,7 +33,7 @@ export const Login = () => {
 
   return (
     <LoginWrapper>
-      <Heading mb="25px">Authorization</Heading>
+      <Heading>Authorization</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
           <Input
@@ -66,6 +66,9 @@ export const Login = () => {
             Sign in
           </Button>
           <Button onClick={() => navigate('/restorePassword')}>Restore password</Button>
+          <Button onClick={() => navigate('/register')}>
+            Don&apos;t have account? Sign up
+          </Button>
         </Stack>
       </form>
     </LoginWrapper>
