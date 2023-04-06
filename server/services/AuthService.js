@@ -1,6 +1,13 @@
 import User from "../models/User.js";
 import Role from "../models/Role.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import secretKey from "../config.js";
+
+const generateAccessToken = (id, roles) => {
+    const payload = { id, roles }
+    return jwt.sign(payload, secretKey.secret, { expiresIn: '24h' })
+}
 
 class AuthService { 
     async register(user) {
@@ -15,8 +22,18 @@ class AuthService {
         return createdUser
     }
 
-    async login(req, res) {
-
+    async login(user) {
+        const { username, password } = user
+        const loggedUser = await User.findOne( { username } );
+        if (!loggedUser) {
+            throw new Error(`user ${username} is not registered`)
+        }
+        const validPass = bcrypt.compareSync(password, loggedUser.password)
+        if (!validPass) {
+            throw new Error(`password is incorrect`)
+        }
+        const token = generateAccessToken(user._id, user.roles)
+        return token;
     }
 
     async getUsers(req, res) {

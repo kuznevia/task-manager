@@ -18,16 +18,43 @@ type FormData = {
 
 export const Login = () => {
   const [showPass, setShowPass] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    const userData = {
+      username: data.login,
+      password: data.pass,
+    };
+
+    try {
+      setIsSubmitting(true);
+      setShowPass(false);
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      setIsSubmitting(false);
+      if (response.status === 200) {
+        const responseBody = await response.json();
+        localStorage.setItem('token', responseBody.token);
+        reset();
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(await response.json());
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   };
 
   return (
@@ -61,7 +88,12 @@ export const Login = () => {
               </Button>
             </InputRightElement>
           </InputGroup>
-          <Button colorScheme="blue" type="submit">
+          <Button
+            colorScheme="blue"
+            type="submit"
+            isLoading={isSubmitting}
+            loadingText="Signing in"
+          >
             Sign in
           </Button>
           <Button onClick={() => navigate('/restorePassword')}>Restore password</Button>
