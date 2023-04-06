@@ -80,7 +80,6 @@ export const Dashboard = () => {
           <CloseButton onClick={onDelete(task._id)} />
         </Flex>
       ))}
-      <Heading>Add Task</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
           <Input

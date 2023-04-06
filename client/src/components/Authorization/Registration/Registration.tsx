@@ -39,7 +39,7 @@ export const Registration = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch('http://localhost:5000/api/users/registration', {
+      const response = await fetch('http://localhost:5000/api/auth/registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
@@ -47,6 +47,8 @@ export const Registration = () => {
       setIsSubmitting(false);
       if (response.status === 200) {
         reset();
+        setShowPass(true);
+        setShowPassConfirmation(true);
       } else {
         // eslint-disable-next-line no-console
         console.log(await response.json());
@@ -82,7 +84,10 @@ export const Registration = () => {
           )}
           <InputGroup size="md">
             <Input
-              {...register('pass', { required: true })}
+              {...register('pass', {
+                validate: (value) => value.length > 3 && value.length < 11,
+                required: true,
+              })}
               errorBorderColor="red.300"
               focusBorderColor={errors.pass && 'red.300'}
               pr="4.5rem"
@@ -98,6 +103,11 @@ export const Registration = () => {
               </Button>
             </InputRightElement>
           </InputGroup>
+          {errors.pass?.type === 'validate' && (
+            <Text fontSize="md" color="red.300">
+              Password should be from 4 to 10 characters
+            </Text>
+          )}
           <InputGroup size="md">
             <Input
               {...register('confirmPass', {

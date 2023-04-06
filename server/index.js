@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import User from './models/User.js';
-import userRouter from './router/userRouter.js';
+import authRouter from './router/authRouter.js';
 import tasksRouter from './router/tasksRouter.js';
 import cors from 'cors';
 
@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors())
 app.use(express.json());
-app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/tasks', tasksRouter);
 
 async function startApp() {

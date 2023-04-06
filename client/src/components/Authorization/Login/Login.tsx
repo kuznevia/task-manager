@@ -17,7 +17,7 @@ type FormData = {
 };
 
 export const Login = () => {
-  const [show, setShow] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -49,15 +49,15 @@ export const Login = () => {
               errorBorderColor="red.300"
               focusBorderColor={errors.pass && 'red.300'}
               pr="4.5rem"
-              type={show ? 'text' : 'password'}
+              type={showPass ? 'text' : 'password'}
               placeholder={errors.pass ? 'Password is required' : 'Enter password'}
               aria-invalid={errors.pass ? 'true' : 'false'}
               isInvalid={errors.pass ? true : false}
               _placeholder={{ color: errors.pass && 'red.300' }}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? 'Hide' : 'Show'}
+              <Button h="1.75rem" size="sm" onClick={() => setShowPass(!showPass)}>
+                {showPass ? 'Hide' : 'Show'}
               </Button>
             </InputRightElement>
           </InputGroup>
