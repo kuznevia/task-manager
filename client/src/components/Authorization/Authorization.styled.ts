@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const LoginWrapper = styled.div`
+export const Wrapper = styled.div`
   height: 100%;
   display: flex;
   gap: 10px;

@@ -6,11 +6,10 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import { Wrapper } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-
-import { LoginWrapper } from './Login.styled';
 
 type FormData = {
   login: string;
@@ -32,7 +31,7 @@ export const Login = () => {
   };
 
   return (
-    <LoginWrapper>
+    <Wrapper>
       <Heading>Authorization</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
@@ -71,6 +70,6 @@ export const Login = () => {
           </Button>
         </Stack>
       </form>
-    </LoginWrapper>
+    </Wrapper>
   );
 };

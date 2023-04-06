@@ -2,9 +2,9 @@ import './index.css';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { Login } from 'components/Authorization/Login/Login';
+import { Registration } from 'components/Authorization/Registration/Registration';
 import { RestorePassword } from 'components/Authorization/RestorePassword/RestorePassword';
 import { Dashboard } from 'components/Dashboard/Dashboard';
-import { Registration } from 'components/Registration/Registration';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
