@@ -4,9 +4,9 @@ import User from './models/User.js';
 import authRouter from './router/authRouter.js';
 import tasksRouter from './router/tasksRouter.js';
 import cors from 'cors';
+import { DB_URL } from './config.js';
 
 const PORT = 5000;
-const DB_URL = 'mongodb+srv://viakuznetsov:WIDiqYHvn7imiOuz@cluster0.caj1cof.mongodb.net/?retryWrites=true&w=majority'
 
 const app = express();  
 
