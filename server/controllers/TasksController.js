@@ -13,8 +13,15 @@ class TasksController {
 
     async getAll(req, res) {
         try {
+            const userId = req.query.userId
+            if (!userId) {
+                return res.status(403).json({ message: 'no userId is specified '})
+            }
+
             const tasks = await TasksService.getAll();
-            return res.json(tasks);
+            const filteredTasks = tasks.filter((task) => task.userId === userId);
+
+            return res.json(filteredTasks);
         } catch (error) {
             res.status(500).json(error)
         }

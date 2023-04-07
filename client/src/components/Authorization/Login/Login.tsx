@@ -44,8 +44,9 @@ export const Login = () => {
       setIsSubmitting(false);
       if (response.status === 200) {
         const responseBody = await response.json();
-        const { token } = responseBody;
+        const { token, _id } = responseBody;
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', _id);
         navigate('/dashboard');
       } else {
         // eslint-disable-next-line no-console

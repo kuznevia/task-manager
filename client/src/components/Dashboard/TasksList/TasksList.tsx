@@ -23,26 +23,37 @@ export const TasksList = () => {
   const { register, handleSubmit, reset } = useForm<FormData>();
 
   useEffect(() => {
-    const dataFetch = async () => {
-      const data: TasksResponse[] = await (
-        await fetch('http://localhost:5000/api/tasks/', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      ).json();
-      setTasks(data);
-    };
-    dataFetch();
+    if (token && userId) {
+      const dataFetch = async () => {
+        const data: TasksResponse[] = await (
+          await fetch(
+            'http://localhost:5000/api/tasks?' + new URLSearchParams({ userId }),
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          )
+        ).json();
+        setTasks(data);
+      };
+      dataFetch();
+    }
   }, [isSubmitting, isDeleting]);
 
   const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
 
   const onSubmit = async (data: FormData) => {
+    const dataToSend = {
+      userId,
+      ...data,
+    };
+
     try {
       setIsSubmitting(true);
       const response = await fetch('http://localhost:5000/api/tasks/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataToSend),
       });
       setIsSubmitting(false);
       if (response.status === 200) {
