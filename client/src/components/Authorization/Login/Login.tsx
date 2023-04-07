@@ -23,7 +23,6 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<FormData>();
 
@@ -45,11 +44,13 @@ export const Login = () => {
       setIsSubmitting(false);
       if (response.status === 200) {
         const responseBody = await response.json();
-        localStorage.setItem('token', responseBody.token);
-        reset();
+        const { token } = responseBody;
+        localStorage.setItem('token', token);
+        navigate('/dashboard');
       } else {
         // eslint-disable-next-line no-console
         console.log(await response.json());
+        setShowPass(false);
       }
     } catch (error) {
       // eslint-disable-next-line no-console

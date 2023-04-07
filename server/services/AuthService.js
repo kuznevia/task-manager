@@ -1,11 +1,10 @@
 import User from "../models/User.js";
-import Role from "../models/Role.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import secretKey from "../config.js";
 
-const generateAccessToken = (id, roles) => {
-    const payload = { id, roles }
+const generateAccessToken = (id) => {
+    const payload = { id }
     return jwt.sign(payload, secretKey.secret, { expiresIn: '24h' })
 }
 
@@ -16,10 +15,10 @@ class AuthService {
         if (candidate) {
             throw new Error('username already taken')
         }
-        const userRole = await Role.findOne({ value: 'admin' })
         const hashPass = bcrypt.hashSync(password, 7);
-        const createdUser = User.create({ username, password: hashPass, roles: [userRole.value] })
-        return createdUser
+        const createdUser = User.create({ username, password: hashPass })
+        const token = generateAccessToken(createdUser._id)
+        return token
     }
 
     async login(user) {
@@ -32,7 +31,7 @@ class AuthService {
         if (!validPass) {
             throw new Error(`password is incorrect`)
         }
-        const token = generateAccessToken(user._id, user.roles)
+        const token = generateAccessToken(user._id)
         return token;
     }
 

@@ -1,7 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
 function App() {
-  return <Navigate replace to="/login" />;
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate replace to="/login" />;
+  }
+  return <Navigate replace to="/dashboard" />;
 }
 
 export default App;

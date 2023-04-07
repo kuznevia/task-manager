@@ -26,7 +26,6 @@ export const Registration = () => {
     register,
     handleSubmit,
     watch,
-    reset,
     formState: { errors },
   } = useForm<FormData>();
   const navigate = useNavigate();
@@ -46,12 +45,15 @@ export const Registration = () => {
       });
       setIsSubmitting(false);
       if (response.status === 200) {
-        reset();
-        setShowPass(true);
-        setShowPassConfirmation(true);
+        const responseBody = await response.json();
+        const { token } = responseBody;
+        localStorage.setItem('token', token);
+        navigate('/dashboard');
       } else {
         // eslint-disable-next-line no-console
         console.log(await response.json());
+        setShowPass(true);
+        setShowPassConfirmation(true);
       }
     } catch (error) {
       // eslint-disable-next-line no-console

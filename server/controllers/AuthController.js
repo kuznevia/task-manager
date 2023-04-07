@@ -8,8 +8,8 @@ class AuthController {
             if(!errors.isEmpty()) {
                 return res.status(400).json({ message: 'Registration error', errors })
             }
-            const user = await AuthService.register(req.body)
-            res.json({ message: 'User registered'});
+            const token = await AuthService.register(req.body)
+            res.json({ token });
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: error.message })
