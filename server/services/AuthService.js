@@ -17,9 +17,8 @@ class AuthService {
         }
         const hashPass = bcrypt.hashSync(password, 7);
         const createdUser = await User.create({ username, password: hashPass })
-        const { _id } = createdUser
         const token = generateAccessToken(createdUser._id)
-        return { token, _id }
+        return token
     }
 
     async login(user) {
@@ -28,13 +27,12 @@ class AuthService {
         if (!loggedUser) {
             throw new Error(`user ${username} is not registered`)
         }
-        const { _id } = loggedUser
         const validPass = bcrypt.compareSync(password, loggedUser.password)
         if (!validPass) {
             throw new Error(`password is incorrect`)
         }
-        const token = generateAccessToken(user._id)
-        return { token, _id };
+        const token = generateAccessToken(loggedUser._id)
+        return token;
     }
 
     async getUsers(req, res) {

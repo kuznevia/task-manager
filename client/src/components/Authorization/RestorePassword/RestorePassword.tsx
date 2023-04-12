@@ -1,5 +1,5 @@
 import { Button, Heading, Input, Stack, Text } from '@chakra-ui/react';
-import { Wrapper } from 'components/Authorization/Authorization.styled';
+import { Container } from 'components/Authorization/Authorization.styled';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ export const RestorePassword = () => {
   };
 
   return (
-    <Wrapper>
+    <Container>
       <Heading>Restore password</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
@@ -48,6 +48,6 @@ export const RestorePassword = () => {
           <Button onClick={() => navigate('/login')}>Go to login page</Button>
         </Stack>
       </form>
-    </Wrapper>
+    </Container>
   );
 };

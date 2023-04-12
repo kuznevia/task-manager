@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const Wrapper = styled.div`
+export const Container = styled.div`
   height: 100%;
   display: flex;
   gap: 10px;

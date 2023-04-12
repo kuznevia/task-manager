@@ -19,11 +19,11 @@ class TasksService {
         return post
     }
 
-    async update(post) {
-        if (!post._id) {
+    async update(task) {
+        if (!task._id) {
             throw new Error('ID is not specified')
         }
-        const updatedPost = await Task.findByIdAndUpdate(post._id, post, { new: true })
+        const updatedPost = await Task.findByIdAndUpdate(task._id, task, { new: true })
         return updatedPost
     }
 

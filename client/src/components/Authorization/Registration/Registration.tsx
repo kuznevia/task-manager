@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { Wrapper } from 'components/Authorization/Authorization.styled';
+import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -45,10 +45,8 @@ export const Registration = () => {
       });
       setIsSubmitting(false);
       if (response.status === 200) {
-        const responseBody = await response.json();
-        const { token, _id } = responseBody;
+        const { token } = await response.json();
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', _id);
         navigate('/dashboard');
       } else {
         // eslint-disable-next-line no-console
@@ -65,7 +63,7 @@ export const Registration = () => {
   const pass = watch('pass');
 
   return (
-    <Wrapper>
+    <Container>
       <Heading>Sing up</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
@@ -158,6 +156,6 @@ export const Registration = () => {
           <Button onClick={() => navigate('/login')}>Go to login page</Button>
         </Stack>
       </form>
-    </Wrapper>
+    </Container>
   );
 };

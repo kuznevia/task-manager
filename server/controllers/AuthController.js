@@ -8,8 +8,8 @@ class AuthController {
             if(!errors.isEmpty()) {
                 return res.status(400).json({ message: 'Registration error', errors })
             }
-            const registerResponse = await AuthService.register(req.body)
-            res.json(registerResponse);
+            const token = await AuthService.register(req.body)
+            res.json({ token });
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: error.message })
@@ -17,8 +17,8 @@ class AuthController {
     }
     async login(req, res) {
         try {
-            const loginResponse = await AuthService.login(req.body)
-            res.json(loginResponse);
+            const token = await AuthService.login(req.body)
+            res.json({ token });
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: error.message })
