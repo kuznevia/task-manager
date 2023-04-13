@@ -10,11 +10,12 @@ import {
   ModalOverlay,
   Stack,
 } from '@chakra-ui/react';
+import InterviewApi from 'api/interviewApiSlice';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-type FormData = {
+export type InterviewDBFormData = {
   name: string;
   group: string;
   subGroup: string;
@@ -32,18 +33,13 @@ export const EditDataForm = ({
   dataFetch: () => Promise<void>;
 }) => {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<InterviewDBFormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = localStorage.getItem('token');
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: InterviewDBFormData) => {
     try {
       setIsSubmitting(true);
-      const response = await fetch('http://localhost:5000/api/interviewData/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-      });
+      const response = await InterviewApi.create(data);
       setIsSubmitting(false);
       if (response.status === 200) {
         reset();

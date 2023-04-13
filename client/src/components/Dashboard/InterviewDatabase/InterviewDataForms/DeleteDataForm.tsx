@@ -8,6 +8,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import InterviewApi from 'api/interviewApiSlice';
 import { useState } from 'react';
 
 export const DeleteDataForm = ({
@@ -22,15 +23,11 @@ export const DeleteDataForm = ({
   deletingId: string;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
-  const token = localStorage.getItem('token');
 
   const onDelete = (id: string) => async () => {
     try {
       setIsDeleting(true);
-      const response = await fetch(`http://localhost:5000/api/interviewData/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await InterviewApi.delete(id);
       setIsDeleting(false);
       if (response.status !== 200) {
         // eslint-disable-next-line no-console

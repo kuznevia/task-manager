@@ -12,7 +12,7 @@ export const Dashboard = () => {
 
   switch (section) {
     case 'tasks':
-      return <TasksList token={token} />;
+      return <TasksList />;
     case 'questions':
       return <InterviewDatabase />;
     default:

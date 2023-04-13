@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import AuthApi from 'api/authApiSlice';
 import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -38,11 +39,7 @@ export const Registration = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch('http://localhost:5000/api/auth/registration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
+      const response = await AuthApi.register(userData);
       setIsSubmitting(false);
       if (response.status === 200) {
         const { token } = await response.json();

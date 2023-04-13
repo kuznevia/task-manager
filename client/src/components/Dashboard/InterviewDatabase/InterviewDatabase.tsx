@@ -7,11 +7,12 @@ import {
   Link,
   useDisclosure,
 } from '@chakra-ui/react';
+import InterviewApi from 'api/interviewApiSlice';
 import { Container } from 'components/Authorization/Authorization.styled';
-import { EditDataForm } from 'components/Dashboard/InterviewDatabase/EditDataForm/EditDataForm';
+import { EditDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/EditDataForm';
 import { useEffect, useState } from 'react';
 
-import { DeleteDataForm } from './EditDataForm/DeleteDataForm';
+import { DeleteDataForm } from './InterviewDataForms/DeleteDataForm';
 
 type InterviewDatabaseResponse = {
   _id: string;
@@ -35,16 +36,13 @@ export const InterviewDatabase = () => {
     onOpen: onDeleteFormOpen,
     onClose: onDeleteFormClose,
   } = useDisclosure();
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     dataFetch();
   }, []);
 
   const dataFetch = async () => {
-    const response = await fetch('http://localhost:5000/api/interviewData', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await InterviewApi.getAll();
     if (response.status === 200) {
       const data: InterviewDatabaseResponse[] = await response.json();
       setData(data);

@@ -6,6 +6,7 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
+import AuthApi from 'api/authApiSlice';
 import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -35,12 +36,7 @@ export const Login = () => {
     try {
       setIsSubmitting(true);
       setShowPass(false);
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-
+      const response = await AuthApi.login(userData);
       setIsSubmitting(false);
       if (response.status === 200) {
         const { token } = await response.json();
