@@ -1,5 +1,11 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Button,
   CloseButton,
   Flex,
@@ -8,11 +14,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import InterviewApi from 'api/interviewApiSlice';
-import { Container } from 'components/Authorization/Authorization.styled';
+import { DeleteDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/EditDataForm';
+import { groupBy } from 'lodash';
 import { useEffect, useState } from 'react';
 
-import { DeleteDataForm } from './InterviewDataForms/DeleteDataForm';
+import { DatabaseContainer, QuestionsWrapper } from './InterviewDatabase.styled';
 
 type InterviewDatabaseResponse = {
   _id: string;
@@ -49,33 +56,90 @@ export const InterviewDatabase = () => {
     }
   };
 
+  const getNestedAccrodions = (data: InterviewDatabaseResponse[], key?: string) => {
+    const groupedData = groupBy(data, key);
+    if (key === 'subGroup') {
+      return (
+        <Accordion defaultIndex={[0]} allowMultiple>
+          {Object.entries(groupedData).map(([key, value], index) => (
+            <AccordionItem key={key}>
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    {index + 1 + ' ' + key}
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                {getNestedAccrodions(value, 'group')}
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      );
+    }
+
+    if (key === 'group') {
+      return (
+        <Accordion defaultIndex={[0]} allowMultiple>
+          {data.map((value, index) => (
+            <AccordionItem key={key}>
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    {index + 1 + ' ' + value.name}
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <Flex>
+                  {value.description || (
+                    <Link href={value.link} isExternal alignItems="center">
+                      <ExternalLinkIcon mx="2px" />
+                    </Link>
+                  )}
+                  <CloseButton
+                    onClick={() => {
+                      setDeletingId(value._id);
+                      onDeleteFormOpen();
+                    }}
+                  />
+                </Flex>
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      );
+    }
+
+    return (
+      <Accordion defaultIndex={[0]} allowMultiple>
+        {Object.entries(groupedData).map(([key, value], index) => (
+          <AccordionItem key={key}>
+            <h2>
+              <AccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  {index + 1 + ' ' + key}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>{getNestedAccrodions(value)}</AccordionPanel>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    );
+  };
+
   return (
     <>
-      <Container>
+      <DatabaseContainer>
         <Heading>Interview Database</Heading>
-        {data.map((data) => (
-          <Flex key={data._id} gap="10px" align="center">
-            <a href={`#${data.group}`}>
-              <p id={data.group}>{data.group}</p>
-            </a>
-            <p>{data.subGroup}</p>
-            <p>{data.name}</p>
-            {data.link && (
-              <Link href={data.link} isExternal alignItems="center">
-                <ExternalLinkIcon mx="2px" />
-              </Link>
-            )}
-            {data.description && <p>{data.description}</p>}
-            <CloseButton
-              onClick={() => {
-                setDeletingId(data._id);
-                onDeleteFormOpen();
-              }}
-            />
-          </Flex>
-        ))}
+        <QuestionsWrapper>{getNestedAccrodions(data, 'subGroup')}</QuestionsWrapper>
         <Button onClick={onEditFormOpen}>Add data</Button>
-      </Container>
+      </DatabaseContainer>
       <EditDataForm
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}

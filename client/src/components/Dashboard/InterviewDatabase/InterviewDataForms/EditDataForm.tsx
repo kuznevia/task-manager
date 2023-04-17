@@ -13,7 +13,6 @@ import {
 import InterviewApi from 'api/interviewApiSlice';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 export type InterviewDBFormData = {
   name: string;
@@ -32,7 +31,6 @@ export const EditDataForm = ({
   onClose: () => void;
   dataFetch: () => Promise<void>;
 }) => {
-  const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm<InterviewDBFormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -91,14 +89,6 @@ export const EditDataForm = ({
                 loadingText="Submitting"
               >
                 Add data
-              </Button>
-              <Button
-                onClick={() => {
-                  localStorage.removeItem('token');
-                  navigate('/login');
-                }}
-              >
-                Logout
               </Button>
             </Stack>
           </form>

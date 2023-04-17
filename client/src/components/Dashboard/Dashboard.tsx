@@ -2,20 +2,25 @@ import { InterviewDatabase } from 'components/Dashboard/InterviewDatabase/Interv
 import { TasksList } from 'components/Dashboard/TasksList/TasksList';
 import { Navigate, useParams } from 'react-router-dom';
 
+import { Navbar } from './Navbar';
+
 export const Dashboard = () => {
   const token = localStorage.getItem('token');
   const { section } = useParams();
 
   if (!token) {
-    return <Navigate replace to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  switch (section) {
-    case 'tasks':
-      return <TasksList />;
-    case 'questions':
-      return <InterviewDatabase />;
-    default:
-      return <Navigate to="/dashboard/questions" replace />;
+  if (!section) {
+    return <Navigate to="/dashboard/questions" replace />;
   }
+
+  return (
+    <>
+      <Navbar />
+      {section === 'tasks' && <TasksList />}
+      {section === 'questions' && <InterviewDatabase />}
+    </>
+  );
 };
