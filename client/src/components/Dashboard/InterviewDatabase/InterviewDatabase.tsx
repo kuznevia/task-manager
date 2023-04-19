@@ -1,27 +1,13 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  CloseButton,
-  Flex,
-  Heading,
-  Link,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, Heading, useDisclosure } from '@chakra-ui/react';
 import InterviewApi from 'api/interviewApiSlice';
 import { DeleteDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/EditDataForm';
-import { groupBy } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { DatabaseContainer, QuestionsWrapper } from './InterviewDatabase.styled';
+import { NestedAccrodions } from './NestedAccordions';
 
-type InterviewDatabaseResponse = {
+export type InterviewDatabaseResponse = {
   _id: string;
   name: string;
   group: string;
@@ -56,88 +42,18 @@ export const InterviewDatabase = () => {
     }
   };
 
-  const getNestedAccrodions = (data: InterviewDatabaseResponse[], key?: string) => {
-    const groupedData = groupBy(data, key);
-    if (key === 'subGroup') {
-      return (
-        <Accordion defaultIndex={[0]} allowMultiple>
-          {Object.entries(groupedData).map(([key, value], index) => (
-            <AccordionItem key={key}>
-              <h2>
-                <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left">
-                    {index + 1 + ' ' + key}
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                {getNestedAccrodions(value, 'group')}
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      );
-    }
-
-    if (key === 'group') {
-      return (
-        <Accordion defaultIndex={[0]} allowMultiple>
-          {data.map((value, index) => (
-            <AccordionItem key={key}>
-              <h2>
-                <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left">
-                    {index + 1 + ' ' + value.name}
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                <Flex>
-                  {value.description || (
-                    <Link href={value.link} isExternal alignItems="center">
-                      <ExternalLinkIcon mx="2px" />
-                    </Link>
-                  )}
-                  <CloseButton
-                    onClick={() => {
-                      setDeletingId(value._id);
-                      onDeleteFormOpen();
-                    }}
-                  />
-                </Flex>
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      );
-    }
-
-    return (
-      <Accordion defaultIndex={[0]} allowMultiple>
-        {Object.entries(groupedData).map(([key, value], index) => (
-          <AccordionItem key={key}>
-            <h2>
-              <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  {index + 1 + ' ' + key}
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>{getNestedAccrodions(value)}</AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    );
-  };
-
   return (
     <>
       <DatabaseContainer>
         <Heading>Interview Database</Heading>
-        <QuestionsWrapper>{getNestedAccrodions(data, 'subGroup')}</QuestionsWrapper>
+        <QuestionsWrapper>
+          <NestedAccrodions
+            data={data}
+            groupKey="subGroup"
+            setDeletingId={setDeletingId}
+            onDeleteFormOpen={onDeleteFormOpen}
+          />
+        </QuestionsWrapper>
         <Button onClick={onEditFormOpen}>Add data</Button>
       </DatabaseContainer>
       <EditDataForm
