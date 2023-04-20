@@ -1,15 +1,29 @@
-import { Button, CloseButton, Flex, Heading, useDisclosure } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Flex,
+  Heading,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import TasksApi from 'app/api/tasksApiSlice';
-import { TasksResponse } from 'app/types';
+import { Task } from 'app/types';
 import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/TasksList/TaskListForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/TasksList/TaskListForms/EditDataForm';
-import { format } from 'date-fns';
+import { isArray } from 'lodash';
 import { useEffect, useState } from 'react';
 
+import { TaskDetails } from './TaskDetails';
+
 export const TasksList = () => {
-  const [tasks, setTasks] = useState<TasksResponse[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [deletingId, setDeletingId] = useState('');
+  const [editingTask, setEditingTask] = useState<Task | []>([]);
   const {
     isOpen: isEditFormOpen,
     onOpen: onEditFormOpen,
@@ -20,6 +34,11 @@ export const TasksList = () => {
     onOpen: onDeleteFormOpen,
     onClose: onDeleteFormClose,
   } = useDisclosure();
+  const {
+    isOpen: isDetailsModalOpen,
+    onOpen: onDetailsModalOpen,
+    onClose: onDetailsModalClose,
+  } = useDisclosure();
 
   useEffect(() => {
     dataFetch();
@@ -28,7 +47,7 @@ export const TasksList = () => {
   const dataFetch = async () => {
     const response = await TasksApi.getAll();
     if (response.status === 200) {
-      const data: TasksResponse[] = await response.json();
+      const data: Task[] = await response.json();
       setTasks(data);
     }
   };
@@ -36,20 +55,65 @@ export const TasksList = () => {
   return (
     <Container>
       <Heading>Tasks Lists</Heading>
-      {tasks.map((task) => (
-        <Flex key={task._id} gap="10px" align="center">
-          <p>{task.name}</p>
-          {task.deadline && <p>{format(new Date(task.deadline), 'dd/MM/yyyy')}</p>}
-          <CloseButton
-            onClick={() => {
-              setDeletingId(task._id);
-              onDeleteFormOpen();
-            }}
-          />
-        </Flex>
-      ))}
-      <Button onClick={onEditFormOpen}>Add data</Button>
+      <Flex gap={6} padding={50} justify="center" wrap="wrap">
+        {tasks.map((task) => (
+          <Card key={task._id} width={250}>
+            <CardHeader>
+              <Heading size="md">{task.title}</Heading>
+            </CardHeader>
+            <CardBody>
+              {task.shortDescription && <Text>{task.shortDescription}</Text>}
+            </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing="2">
+                <Button
+                  variant="solid"
+                  colorScheme="blue"
+                  onClick={() => {
+                    setEditingTask(task);
+                    onDetailsModalOpen();
+                  }}
+                  size="sm"
+                >
+                  Details
+                </Button>
+                <Button
+                  variant="solid"
+                  colorScheme="blue"
+                  onClick={() => {
+                    setEditingTask(task);
+                    onEditFormOpen();
+                  }}
+                  size="sm"
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  colorScheme="blue"
+                  onClick={() => {
+                    setDeletingId(task._id);
+                    onDeleteFormOpen();
+                  }}
+                  size="sm"
+                >
+                  Delete
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        ))}
+      </Flex>
+      <Button
+        onClick={() => {
+          setEditingTask([]);
+          onEditFormOpen();
+        }}
+      >
+        Add task
+      </Button>
       <EditDataForm
+        task={editingTask}
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}
         dataFetch={dataFetch}
@@ -59,6 +123,21 @@ export const TasksList = () => {
         onClose={onDeleteFormClose}
         dataFetch={dataFetch}
         deletingId={deletingId}
+      />
+      <TaskDetails
+        task={editingTask}
+        isOpen={isDetailsModalOpen}
+        onEdit={() => {
+          setEditingTask(editingTask);
+          onEditFormOpen();
+          onDetailsModalClose();
+        }}
+        onDelete={() => {
+          setDeletingId(isArray(editingTask) ? '' : editingTask._id);
+          onDeleteFormOpen();
+          onDetailsModalClose();
+        }}
+        onClose={onDetailsModalClose}
       />
     </Container>
   );

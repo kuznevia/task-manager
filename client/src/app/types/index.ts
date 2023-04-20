@@ -2,11 +2,6 @@ import {
   InterviewDatabaseResponse,
   InterviewDBFormData,
 } from 'app/types/InterviewDatabase';
-import { TasksFormData, TasksResponse } from 'app/types/TaskList';
+import { Task, TasksFormData } from 'app/types/TaskList';
 
-export type {
-  InterviewDatabaseResponse,
-  InterviewDBFormData,
-  TasksFormData,
-  TasksResponse,
-};
+export type { InterviewDatabaseResponse, InterviewDBFormData, Task, TasksFormData };
