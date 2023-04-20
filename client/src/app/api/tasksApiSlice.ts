@@ -1,6 +1,6 @@
-import { InterviewDBFormData } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/EditDataForm';
+import { TasksFormData } from 'app/types';
 
-class InterviewApi {
+class TasksApi {
   checkAuth(response: Response) {
     if (response.status === 403) {
       localStorage.removeItem('token');
@@ -13,15 +13,15 @@ class InterviewApi {
   }
 
   async getAll() {
-    const response = await fetch('http://localhost:5000/api/interviewData', {
+    const response = await fetch('http://localhost:5000/api/tasks', {
       headers: { Authorization: `Bearer ${this.getToken()}` },
     });
     this.checkAuth(response);
     return response;
   }
 
-  async create(data: InterviewDBFormData) {
-    const response = await fetch('http://localhost:5000/api/interviewData/', {
+  async create(data: TasksFormData) {
+    const response = await fetch('http://localhost:5000/api/tasks/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ class InterviewApi {
   }
 
   async delete(id: string) {
-    const response = await fetch(`http://localhost:5000/api/interviewData/${id}`, {
+    const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${this.getToken()}` },
     });
@@ -43,4 +43,4 @@ class InterviewApi {
   }
 }
 
-export default new InterviewApi();
+export default new TasksApi();

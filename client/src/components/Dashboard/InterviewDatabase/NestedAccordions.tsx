@@ -10,9 +10,8 @@ import {
   Flex,
   Link,
 } from '@chakra-ui/react';
+import { InterviewDatabaseResponse } from 'app/types';
 import { groupBy } from 'lodash';
-
-import { InterviewDatabaseResponse } from './InterviewDatabase';
 
 export const NestedAccrodions = ({
   data,

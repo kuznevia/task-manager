@@ -10,8 +10,8 @@ import {
   ModalOverlay,
   Stack,
 } from '@chakra-ui/react';
-import InterviewApi from 'app/api/interviewApiSlice';
-import { InterviewDBFormData } from 'app/types';
+import TasksApi from 'app/api/tasksApiSlice';
+import { TasksFormData } from 'app/types';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -24,13 +24,13 @@ export const EditDataForm = ({
   onClose: () => void;
   dataFetch: () => Promise<void>;
 }) => {
-  const { register, handleSubmit, reset } = useForm<InterviewDBFormData>();
+  const { register, handleSubmit, reset } = useForm<TasksFormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = async (data: InterviewDBFormData) => {
+  const onSubmit = async (data: TasksFormData) => {
     try {
       setIsSubmitting(true);
-      const response = await InterviewApi.create(data);
+      const response = await TasksApi.create(data);
       setIsSubmitting(false);
       if (response.status === 200) {
         reset();
@@ -50,7 +50,7 @@ export const EditDataForm = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add Interview Database Element</ModalHeader>
+        <ModalHeader>Add Task</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -59,29 +59,15 @@ export const EditDataForm = ({
                 {...register('name', {
                   required: true,
                 })}
-                placeholder="Enter name"
+                placeholder="Enter task"
               />
-              <Input
-                {...register('group', {
-                  required: true,
-                })}
-                placeholder="Enter data group"
-              />
-              <Input
-                {...register('subGroup', {
-                  required: true,
-                })}
-                placeholder="Enter data subgroup"
-              />
-              <Input {...register('link')} placeholder="Enter link" />
-              <Input {...register('description')} placeholder="Enter description" />
               <Button
                 colorScheme="blue"
                 type="submit"
                 isLoading={isSubmitting}
                 loadingText="Submitting"
               >
-                Add data
+                Add task
               </Button>
             </Stack>
           </form>

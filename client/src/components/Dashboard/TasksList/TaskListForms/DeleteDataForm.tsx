@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import InterviewApi from 'app/api/interviewApiSlice';
+import TasksApi from 'app/api/tasksApiSlice';
 import { useState } from 'react';
 
 export const DeleteDataForm = ({
@@ -27,7 +27,7 @@ export const DeleteDataForm = ({
   const onDelete = (id: string) => async () => {
     try {
       setIsDeleting(true);
-      const response = await InterviewApi.delete(id);
+      const response = await TasksApi.delete(id);
       setIsDeleting(false);
       if (response.status !== 200) {
         // eslint-disable-next-line no-console

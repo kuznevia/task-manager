@@ -1,20 +1,12 @@
 import { Button, Heading, useDisclosure } from '@chakra-ui/react';
-import InterviewApi from 'api/interviewApiSlice';
+import InterviewApi from 'app/api/interviewApiSlice';
+import { InterviewDatabaseResponse } from 'app/types';
+import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/InterviewDatabase/InterviewDataForms/EditDataForm';
 import { useEffect, useState } from 'react';
 
-import { DatabaseContainer, QuestionsWrapper } from './InterviewDatabase.styled';
 import { NestedAccrodions } from './NestedAccordions';
-
-export type InterviewDatabaseResponse = {
-  _id: string;
-  name: string;
-  group: string;
-  subGroup: string;
-  link?: string;
-  description?: string;
-};
 
 export const InterviewDatabase = () => {
   const [data, setData] = useState<InterviewDatabaseResponse[]>([]);
@@ -44,18 +36,16 @@ export const InterviewDatabase = () => {
 
   return (
     <>
-      <DatabaseContainer>
+      <Container>
         <Heading>Interview Database</Heading>
-        <QuestionsWrapper>
-          <NestedAccrodions
-            data={data}
-            groupKey="subGroup"
-            setDeletingId={setDeletingId}
-            onDeleteFormOpen={onDeleteFormOpen}
-          />
-        </QuestionsWrapper>
+        <NestedAccrodions
+          data={data}
+          groupKey="subGroup"
+          setDeletingId={setDeletingId}
+          onDeleteFormOpen={onDeleteFormOpen}
+        />
         <Button onClick={onEditFormOpen}>Add data</Button>
-      </DatabaseContainer>
+      </Container>
       <EditDataForm
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}
