@@ -33,6 +33,19 @@ class TasksApi {
     return response;
   }
 
+  async update(data: TasksFormData & { _id: string }) {
+    const response = await fetch('http://localhost:5000/api/tasks/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.getToken()}`,
+      },
+      body: JSON.stringify(data),
+    });
+    this.checkAuth(response);
+    return response;
+  }
+
   async delete(id: string) {
     const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
       method: 'DELETE',

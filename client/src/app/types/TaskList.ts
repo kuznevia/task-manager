@@ -1,9 +1,12 @@
-export type TasksResponse = {
+export type Task = {
   _id: string;
-  name: string;
-  deadline: Date;
+  title: string;
+  shortDescription?: string;
+  description: string;
 };
 
 export type TasksFormData = {
-  name: string;
+  title: string;
+  shortDescription?: string;
+  description: string;
 };
