@@ -1,12 +1,26 @@
+import { InterviewDatabase } from 'components/Dashboard/InterviewDatabase/InterviewDatabase';
 import { TasksList } from 'components/Dashboard/TasksList/TasksList';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+
+import { Navbar } from './Navbar';
 
 export const Dashboard = () => {
   const token = localStorage.getItem('token');
+  const { section } = useParams();
 
   if (!token) {
-    return <Navigate replace to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  return <TasksList />;
+  if (!section) {
+    return <Navigate to="/dashboard/questions" replace />;
+  }
+
+  return (
+    <>
+      <Navbar />
+      {section === 'tasks' && <TasksList />}
+      {section === 'questions' && <InterviewDatabase />}
+    </>
+  );
 };

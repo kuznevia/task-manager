@@ -1,115 +1,65 @@
-import { Button, CloseButton, Flex, Heading, Input, Stack } from '@chakra-ui/react';
-import { Wrapper } from 'components/Authorization/Authorization.styled';
+import { Button, CloseButton, Flex, Heading, useDisclosure } from '@chakra-ui/react';
+import TasksApi from 'app/api/tasksApiSlice';
+import { TasksResponse } from 'app/types';
+import { Container } from 'components/Dashboard/Dashboard.styled';
+import { DeleteDataForm } from 'components/Dashboard/TasksList/TaskListForms/DeleteDataForm';
+import { EditDataForm } from 'components/Dashboard/TasksList/TaskListForms/EditDataForm';
 import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-
-type TasksResponse = {
-  _id: string;
-  name: string;
-  deadline: Date;
-};
-
-type FormData = {
-  name: string;
-  deadline: Date;
-};
+import { useEffect, useState } from 'react';
 
 export const TasksList = () => {
   const [tasks, setTasks] = useState<TasksResponse[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const [deletingId, setDeletingId] = useState('');
+  const {
+    isOpen: isEditFormOpen,
+    onOpen: onEditFormOpen,
+    onClose: onEditFormClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteFormOpen,
+    onOpen: onDeleteFormOpen,
+    onClose: onDeleteFormClose,
+  } = useDisclosure();
 
   useEffect(() => {
-    const dataFetch = async () => {
-      const data: TasksResponse[] = await (
-        await fetch('http://localhost:5000/api/tasks/', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      ).json();
-      setTasks(data);
-    };
     dataFetch();
-  }, [isSubmitting, isDeleting]);
+  }, []);
 
-  const token = localStorage.getItem('token');
-
-  const onSubmit = async (data: FormData) => {
-    try {
-      setIsSubmitting(true);
-      const response = await fetch('http://localhost:5000/api/tasks/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-      });
-      setIsSubmitting(false);
-      if (response.status === 200) {
-        reset();
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(await response.json());
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  };
-
-  const onDelete = (id: string) => async () => {
-    try {
-      setIsDeleting(true);
-      const response = await fetch(`http://localhost:5000/api/tasks/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setIsDeleting(false);
-      if (response.status !== 200) {
-        // eslint-disable-next-line no-console
-        console.log(await response.json());
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+  const dataFetch = async () => {
+    const response = await TasksApi.getAll();
+    if (response.status === 200) {
+      const data: TasksResponse[] = await response.json();
+      setTasks(data);
     }
   };
 
   return (
-    <Wrapper>
+    <Container>
       <Heading>Tasks Lists</Heading>
       {tasks.map((task) => (
         <Flex key={task._id} gap="10px" align="center">
           <p>{task.name}</p>
-          <p>{format(new Date(task.deadline), 'dd/MM/yyyy')}</p>
-          <CloseButton onClick={onDelete(task._id)} />
+          {task.deadline && <p>{format(new Date(task.deadline), 'dd/MM/yyyy')}</p>}
+          <CloseButton
+            onClick={() => {
+              setDeletingId(task._id);
+              onDeleteFormOpen();
+            }}
+          />
         </Flex>
       ))}
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <Stack spacing={3}>
-          <Input
-            {...register('name', {
-              required: true,
-            })}
-            placeholder="Enter task"
-          />
-          <Input
-            {...register('deadline', {
-              required: true,
-            })}
-            placeholder="Select Date and Time"
-            type="datetime-local"
-          />
-          <Button
-            colorScheme="blue"
-            type="submit"
-            isLoading={isSubmitting}
-            loadingText="Submitting"
-          >
-            Add task
-          </Button>
-        </Stack>
-      </form>
-    </Wrapper>
+      <Button onClick={onEditFormOpen}>Add data</Button>
+      <EditDataForm
+        isOpen={isEditFormOpen}
+        onClose={onEditFormClose}
+        dataFetch={dataFetch}
+      />
+      <DeleteDataForm
+        isOpen={isDeleteFormOpen}
+        onClose={onDeleteFormClose}
+        dataFetch={dataFetch}
+        deletingId={deletingId}
+      />
+    </Container>
   );
 };

@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path="/login" element={<Login />} />
           <Route path="/restorePassword" element={<RestorePassword />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/:section?" element={<Dashboard />} />
         </Routes>
       </ChakraProvider>
     </BrowserRouter>

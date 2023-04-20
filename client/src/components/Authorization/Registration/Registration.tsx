@@ -7,7 +7,8 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { Wrapper } from 'components/Authorization/Authorization.styled';
+import AuthApi from 'app/api/authApiSlice';
+import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -38,15 +39,10 @@ export const Registration = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await fetch('http://localhost:5000/api/auth/registration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
+      const response = await AuthApi.register(userData);
       setIsSubmitting(false);
       if (response.status === 200) {
-        const responseBody = await response.json();
-        const { token } = responseBody;
+        const { token } = await response.json();
         localStorage.setItem('token', token);
         navigate('/dashboard');
       } else {
@@ -64,7 +60,7 @@ export const Registration = () => {
   const pass = watch('pass');
 
   return (
-    <Wrapper>
+    <Container>
       <Heading>Sing up</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
@@ -157,6 +153,6 @@ export const Registration = () => {
           <Button onClick={() => navigate('/login')}>Go to login page</Button>
         </Stack>
       </form>
-    </Wrapper>
+    </Container>
   );
 };

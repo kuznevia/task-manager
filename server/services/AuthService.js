@@ -16,7 +16,7 @@ class AuthService {
             throw new Error('username already taken')
         }
         const hashPass = bcrypt.hashSync(password, 7);
-        const createdUser = User.create({ username, password: hashPass })
+        const createdUser = await User.create({ username, password: hashPass })
         const token = generateAccessToken(createdUser._id)
         return token
     }
@@ -31,7 +31,7 @@ class AuthService {
         if (!validPass) {
             throw new Error(`password is incorrect`)
         }
-        const token = generateAccessToken(user._id)
+        const token = generateAccessToken(loggedUser._id)
         return token;
     }
 

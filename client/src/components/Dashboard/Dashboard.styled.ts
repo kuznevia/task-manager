@@ -5,6 +5,14 @@ export const Container = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+`;
+
+export const NavbarWrapper = styled.div`
+  height: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 8px;
 `;

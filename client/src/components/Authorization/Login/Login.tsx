@@ -6,7 +6,8 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/react';
-import { Wrapper } from 'components/Authorization/Authorization.styled';
+import AuthApi from 'app/api/authApiSlice';
+import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -35,16 +36,10 @@ export const Login = () => {
     try {
       setIsSubmitting(true);
       setShowPass(false);
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-
+      const response = await AuthApi.login(userData);
       setIsSubmitting(false);
       if (response.status === 200) {
-        const responseBody = await response.json();
-        const { token } = responseBody;
+        const { token } = await response.json();
         localStorage.setItem('token', token);
         navigate('/dashboard');
       } else {
@@ -59,7 +54,7 @@ export const Login = () => {
   };
 
   return (
-    <Wrapper>
+    <Container>
       <Heading>Authorization</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
@@ -103,6 +98,6 @@ export const Login = () => {
           </Button>
         </Stack>
       </form>
-    </Wrapper>
+    </Container>
   );
 };
