@@ -11,6 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import TasksApi from 'app/api/tasksApiSlice';
+import { todayString } from 'app/helpers/date';
 import { Task } from 'app/types';
 import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/TasksList/TaskListForms/DeleteDataForm';
@@ -22,6 +23,7 @@ import { TaskDetails } from './TaskDetails';
 
 export const TasksList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isTodayTasks, setIsTodaytasks] = useState(false);
   const [deletingId, setDeletingId] = useState('');
   const [editingTask, setEditingTask] = useState<Task | []>([]);
   const {
@@ -52,11 +54,15 @@ export const TasksList = () => {
     }
   };
 
+  const filteredTasks = isTodayTasks
+    ? tasks.filter((task) => task.shortDescription?.includes(todayString))
+    : tasks;
+
   return (
     <Container>
       <Heading>Tasks Lists</Heading>
       <Flex gap={6} padding={50} justify="center" wrap="wrap">
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <Card key={task._id} width={250}>
             <CardHeader>
               <Heading size="md">{task.title}</Heading>
@@ -104,14 +110,23 @@ export const TasksList = () => {
           </Card>
         ))}
       </Flex>
-      <Button
-        onClick={() => {
-          setEditingTask([]);
-          onEditFormOpen();
-        }}
-      >
-        Add task
-      </Button>
+      <ButtonGroup mb={75}>
+        <Button
+          onClick={() => {
+            setEditingTask([]);
+            onEditFormOpen();
+          }}
+        >
+          Add task
+        </Button>
+        <Button
+          onClick={() => {
+            setIsTodaytasks(!isTodayTasks);
+          }}
+        >
+          {isTodayTasks ? 'Get all tasks' : 'Get today tasks'}
+        </Button>
+      </ButtonGroup>
       <EditDataForm
         task={editingTask}
         isOpen={isEditFormOpen}

@@ -13,7 +13,7 @@ export const Dashboard = () => {
   }
 
   if (!section) {
-    return <Navigate to="/dashboard/questions" replace />;
+    return <Navigate to="/dashboard/tasks" replace />;
   }
 
   return (
