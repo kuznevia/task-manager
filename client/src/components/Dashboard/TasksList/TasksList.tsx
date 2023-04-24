@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import TasksApi from 'app/api/tasksApiSlice';
 import { todayString } from 'app/helpers/date';
+import { useFilter } from 'app/hooks/use-filter';
 import { Task } from 'app/types';
 import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/TasksList/TaskListForms/DeleteDataForm';
@@ -23,7 +24,6 @@ import { TaskDetails } from './TaskDetails';
 
 export const TasksList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [isTodayTasks, setIsTodaytasks] = useState(false);
   const [deletingId, setDeletingId] = useState('');
   const [editingTask, setEditingTask] = useState<Task | []>([]);
   const {
@@ -41,6 +41,8 @@ export const TasksList = () => {
     onOpen: onDetailsModalOpen,
     onClose: onDetailsModalClose,
   } = useDisclosure();
+
+  const { isTodayTasks, setIsTodaytasks } = useFilter();
 
   useEffect(() => {
     dataFetch();

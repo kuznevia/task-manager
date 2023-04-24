@@ -5,7 +5,7 @@ import secretKey from "../config.js";
 
 const generateAccessToken = (id) => {
     const payload = { id }
-    return jwt.sign(payload, secretKey.secret, { expiresIn: '24h' })
+    return jwt.sign(payload, secretKey.secret, { expiresIn: '7d' })
 }
 
 class AuthService { 

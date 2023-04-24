@@ -40,7 +40,7 @@ export const InterviewDatabase = () => {
         <Heading>Interview Database</Heading>
         <NestedAccrodions
           data={data}
-          groupKey="subGroup"
+          groupKey="group"
           setDeletingId={setDeletingId}
           onDeleteFormOpen={onDeleteFormOpen}
         />

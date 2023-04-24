@@ -25,9 +25,9 @@ export const NestedAccrodions = ({
   onDeleteFormOpen: () => void;
 }) => {
   const groupedData = groupBy(data, groupKey);
-  if (groupKey === 'subGroup') {
+  if (groupKey === 'group') {
     return (
-      <Accordion allowMultiple>
+      <Accordion allowMultiple padding={50}>
         {Object.entries(groupedData).map(([key, value], index) => (
           <AccordionItem key={key}>
             <h2>
@@ -41,7 +41,7 @@ export const NestedAccrodions = ({
             <AccordionPanel pb={4}>
               <NestedAccrodions
                 data={value}
-                groupKey="group"
+                groupKey="subGroup"
                 setDeletingId={setDeletingId}
                 onDeleteFormOpen={onDeleteFormOpen}
               />
@@ -52,7 +52,7 @@ export const NestedAccrodions = ({
     );
   }
 
-  if (groupKey === 'group') {
+  if (groupKey === 'subGroup') {
     return (
       <Accordion allowMultiple>
         {Object.entries(groupedData).map(([key, value], index) => (
@@ -91,8 +91,9 @@ export const NestedAccrodions = ({
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
-            <Flex>
-              {value.description || (
+            <Flex gap={5}>
+              {value.description && value.description}
+              {value.link && (
                 <Link href={value.link} isExternal alignItems="center">
                   <ExternalLinkIcon mx="2px" />
                 </Link>
