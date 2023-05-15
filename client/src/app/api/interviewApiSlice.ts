@@ -1,4 +1,4 @@
-import { InterviewDBFormData } from 'app/types';
+import { QuestionsFormData } from 'app/types';
 
 class InterviewApi {
   checkAuth(response: Response) {
@@ -20,7 +20,7 @@ class InterviewApi {
     return response;
   }
 
-  async create(data: InterviewDBFormData) {
+  async create(data: QuestionsFormData) {
     const response = await fetch('http://localhost:5000/api/interviewData/', {
       method: 'POST',
       headers: {

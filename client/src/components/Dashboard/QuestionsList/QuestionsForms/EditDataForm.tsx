@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import InterviewApi from 'app/api/interviewApiSlice';
-import { InterviewDBFormData } from 'app/types';
+import { QuestionsFormData } from 'app/types';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -24,10 +24,10 @@ export const EditDataForm = ({
   onClose: () => void;
   dataFetch: () => Promise<void>;
 }) => {
-  const { register, handleSubmit, reset } = useForm<InterviewDBFormData>();
+  const { register, handleSubmit, reset } = useForm<QuestionsFormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = async (data: InterviewDBFormData) => {
+  const onSubmit = async (data: QuestionsFormData) => {
     try {
       setIsSubmitting(true);
       const response = await InterviewApi.create(data);

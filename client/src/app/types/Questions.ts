@@ -1,4 +1,4 @@
-export type InterviewDatabaseResponse = {
+export type Question = {
   _id: string;
   name: string;
   group: string;
@@ -7,7 +7,7 @@ export type InterviewDatabaseResponse = {
   description?: string;
 };
 
-export type InterviewDBFormData = {
+export type QuestionsFormData = {
   name: string;
   group: string;
   subGroup: string;

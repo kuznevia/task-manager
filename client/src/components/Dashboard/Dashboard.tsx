@@ -1,4 +1,4 @@
-import { InterviewDatabase } from 'components/Dashboard/InterviewDatabase/InterviewDatabase';
+import { QuestionsList } from 'components/Dashboard/QuestionsList/QuestionsList';
 import { TasksList } from 'components/Dashboard/TasksList/TasksList';
 import { Navigate, useParams } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ export const Dashboard = () => {
     <>
       <Navbar />
       {section === 'tasks' && <TasksList />}
-      {section === 'questions' && <InterviewDatabase />}
+      {section === 'questions' && <QuestionsList />}
     </>
   );
 };
