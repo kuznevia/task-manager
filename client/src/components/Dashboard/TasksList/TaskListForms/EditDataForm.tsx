@@ -27,7 +27,7 @@ export const EditDataForm = ({
   isOpen: boolean;
   onClose: () => void;
   dataFetch: () => Promise<void>;
-  task: Task | [];
+  task?: Task;
 }) => {
   const {
     register,
@@ -38,7 +38,7 @@ export const EditDataForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isArray(task)) {
+    if (task) {
       reset({
         title: task.title,
         shortDescription: task.shortDescription,
@@ -56,7 +56,7 @@ export const EditDataForm = ({
   const onSubmit = async (data: TasksFormData) => {
     try {
       setIsSubmitting(true);
-      const response = !isArray(task)
+      const response = task
         ? await TasksApi.update({ _id: task._id, ...data })
         : await TasksApi.create(data);
       setIsSubmitting(false);

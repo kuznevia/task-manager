@@ -10,7 +10,6 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { Task } from 'app/types';
-import { isArray } from 'lodash';
 import React from 'react';
 
 export const TaskDetails = ({
@@ -24,9 +23,9 @@ export const TaskDetails = ({
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
-  task: Task | [];
+  task?: Task;
 }) => {
-  if (isArray(task)) {
+  if (!task) {
     return null;
   }
 

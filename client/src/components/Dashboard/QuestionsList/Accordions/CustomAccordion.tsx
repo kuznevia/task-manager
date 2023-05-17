@@ -28,7 +28,7 @@ export const CustomAccordion = ({
   groupKey?: string;
 }) => {
   return (
-    <Accordion allowMultiple padding={50}>
+    <Accordion allowMultiple padding={groupKey ? 50 : 0}>
       {Object.entries(data).map(([key, value], index) => (
         <AccordionItem key={key}>
           <h2>

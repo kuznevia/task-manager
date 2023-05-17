@@ -17,7 +17,6 @@ import { Task } from 'app/types';
 import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/TasksList/TaskListForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/TasksList/TaskListForms/EditDataForm';
-import { isArray } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { TaskDetails } from './TaskDetails';
@@ -25,7 +24,7 @@ import { TaskDetails } from './TaskDetails';
 export const TasksList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [deletingId, setDeletingId] = useState('');
-  const [editingTask, setEditingTask] = useState<Task | []>([]);
+  const [editingTask, setEditingTask] = useState<Task>();
   const {
     isOpen: isEditFormOpen,
     onOpen: onEditFormOpen,
@@ -115,7 +114,7 @@ export const TasksList = () => {
       <ButtonGroup mb={75}>
         <Button
           onClick={() => {
-            setEditingTask([]);
+            setEditingTask(undefined);
             onEditFormOpen();
           }}
         >
@@ -150,7 +149,7 @@ export const TasksList = () => {
           onDetailsModalClose();
         }}
         onDelete={() => {
-          setDeletingId(isArray(editingTask) ? '' : editingTask._id);
+          setDeletingId(editingTask ? editingTask._id : '');
           onDeleteFormOpen();
           onDetailsModalClose();
         }}
