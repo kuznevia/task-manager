@@ -11,7 +11,6 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { Question } from 'app/types';
-import { isArray } from 'lodash';
 import React from 'react';
 
 export const QuestionDetails = ({
@@ -25,9 +24,9 @@ export const QuestionDetails = ({
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
-  question: Question | [];
+  question?: Question;
 }) => {
-  if (isArray(question)) {
+  if (!question) {
     return null;
   }
 

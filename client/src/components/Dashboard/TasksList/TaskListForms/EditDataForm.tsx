@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import TasksApi from 'app/api/tasksApiSlice';
 import { Task, TasksFormData } from 'app/types';
-import { isArray } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -125,7 +124,7 @@ export const EditDataForm = ({
                 loadingText="Submitting"
                 disabled={isSubmitting}
               >
-                {!isArray(task) ? 'Edit task' : 'Add task'}
+                {task ? 'Edit task' : 'Add task'}
               </Button>
             </Stack>
           </form>

@@ -33,6 +33,19 @@ class InterviewApi {
     return response;
   }
 
+  async update(data: QuestionsFormData & { _id: string }) {
+    const response = await fetch('http://localhost:5000/api/interviewData/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.getToken()}`,
+      },
+      body: JSON.stringify(data),
+    });
+    this.checkAuth(response);
+    return response;
+  }
+
   async delete(id: string) {
     const response = await fetch(`http://localhost:5000/api/interviewData/${id}`, {
       method: 'DELETE',

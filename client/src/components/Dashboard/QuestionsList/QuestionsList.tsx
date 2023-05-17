@@ -4,7 +4,6 @@ import { Question } from 'app/types';
 import { Container } from 'components/Dashboard/Dashboard.styled';
 import { DeleteDataForm } from 'components/Dashboard/QuestionsList/QuestionsForms/DeleteDataForm';
 import { EditDataForm } from 'components/Dashboard/QuestionsList/QuestionsForms/EditDataForm';
-import { isArray } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { NestedAccrodions } from './Accordions/NestedAccordions';
@@ -13,7 +12,7 @@ import { QuestionDetails } from './QuestionDetails';
 export const QuestionsList = () => {
   const [data, setData] = useState<Question[]>([]);
   const [deletingId, setDeletingId] = useState('');
-  const [editingQuestion, setEditingQuestion] = useState<Question | []>([]);
+  const [editingQuestion, setEditingQuestion] = useState<Question>();
   const {
     isOpen: isEditFormOpen,
     onOpen: onEditFormOpen,
@@ -60,6 +59,7 @@ export const QuestionsList = () => {
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}
         dataFetch={dataFetch}
+        question={editingQuestion}
       />
       <DeleteDataForm
         isOpen={isDeleteFormOpen}
@@ -76,7 +76,7 @@ export const QuestionsList = () => {
           onDetailsModalClose();
         }}
         onDelete={() => {
-          setDeletingId(isArray(editingQuestion) ? '' : editingQuestion._id);
+          setDeletingId(editingQuestion ? editingQuestion._id : '');
           onDeleteFormOpen();
           onDetailsModalClose();
         }}

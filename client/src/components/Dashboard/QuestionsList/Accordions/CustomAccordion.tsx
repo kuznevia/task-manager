@@ -23,7 +23,7 @@ export const CustomAccordion = ({
   data: Dictionary<Question[]>;
   setDeletingId: React.Dispatch<React.SetStateAction<string>>;
   onDeleteFormOpen: () => void;
-  setEditingQuestion: React.Dispatch<React.SetStateAction<Question | []>>;
+  setEditingQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
   onDetailsModalOpen: () => void;
   groupKey?: string;
 }) => {

@@ -129,10 +129,10 @@ export const TasksList = () => {
         </Button>
       </ButtonGroup>
       <EditDataForm
-        task={editingTask}
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}
         dataFetch={dataFetch}
+        task={editingTask}
       />
       <DeleteDataForm
         isOpen={isDeleteFormOpen}

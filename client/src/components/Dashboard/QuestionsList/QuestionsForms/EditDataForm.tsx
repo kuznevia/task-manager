@@ -11,26 +11,50 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import InterviewApi from 'app/api/interviewApiSlice';
-import { QuestionsFormData } from 'app/types';
-import React, { useState } from 'react';
+import { Question, QuestionsFormData } from 'app/types';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const EditDataForm = ({
   isOpen,
   onClose,
   dataFetch,
+  question,
 }: {
   isOpen: boolean;
   onClose: () => void;
   dataFetch: () => Promise<void>;
+  question?: Question;
 }) => {
   const { register, handleSubmit, reset } = useForm<QuestionsFormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (question) {
+      reset({
+        name: question.name,
+        group: question.group,
+        subGroup: question.subGroup,
+        link: question.link,
+        description: question.description,
+      });
+    } else {
+      reset({
+        name: undefined,
+        group: undefined,
+        subGroup: undefined,
+        link: undefined,
+        description: undefined,
+      });
+    }
+  }, [question]);
+
   const onSubmit = async (data: QuestionsFormData) => {
     try {
       setIsSubmitting(true);
-      const response = await InterviewApi.create(data);
+      const response = question
+        ? await InterviewApi.update({ _id: question._id, ...data })
+        : await InterviewApi.create(data);
       setIsSubmitting(false);
       if (response.status === 200) {
         reset();
@@ -81,7 +105,7 @@ export const EditDataForm = ({
                 isLoading={isSubmitting}
                 loadingText="Submitting"
               >
-                Add data
+                {question ? 'Edit data' : 'Add data'}
               </Button>
             </Stack>
           </form>
