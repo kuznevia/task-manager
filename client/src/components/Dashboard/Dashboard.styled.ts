@@ -7,6 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  overflow: auto;
 `;
 
 export const NavbarWrapper = styled.div`

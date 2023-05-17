@@ -10,7 +10,7 @@ import AuthApi from 'app/api/authApiSlice';
 import { Container } from 'components/Authorization/Authorization.styled';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 type FormData = {
   login: string;
@@ -26,6 +26,8 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  const token = localStorage.getItem('token');
 
   const onSubmit = async (data: FormData) => {
     const userData = {
@@ -52,6 +54,10 @@ export const Login = () => {
       console.log(error);
     }
   };
+
+  if (token) {
+    return <Navigate replace to="/dashboard" />;
+  }
 
   return (
     <Container>

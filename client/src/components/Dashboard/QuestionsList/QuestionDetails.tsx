@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonGroup,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,23 +10,23 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { Task } from 'app/types';
+import { Question } from 'app/types';
 import React from 'react';
 
-export const TaskDetails = ({
+export const QuestionDetails = ({
   isOpen,
   onClose,
   onEdit,
   onDelete,
-  task,
+  question,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onEdit: () => void;
   onDelete: () => void;
-  task?: Task;
+  question?: Question;
 }) => {
-  if (!task) {
+  if (!question) {
     return null;
   }
 
@@ -33,9 +34,15 @@ export const TaskDetails = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{task.title}</ModalHeader>
+        <ModalHeader>{question.name}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>{task.description}</ModalBody>
+        <ModalBody>
+          {question.description || (
+            <Link color="blue.600" href={question.link}>
+              Ссылка
+            </Link>
+          )}
+        </ModalBody>
         <ModalFooter>
           <ButtonGroup spacing={2}>
             <Button colorScheme="blue" onClick={onClose}>

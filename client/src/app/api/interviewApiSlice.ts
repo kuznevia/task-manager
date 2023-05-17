@@ -1,4 +1,4 @@
-import { InterviewDBFormData } from 'app/types';
+import { QuestionsFormData } from 'app/types';
 
 class InterviewApi {
   checkAuth(response: Response) {
@@ -20,9 +20,22 @@ class InterviewApi {
     return response;
   }
 
-  async create(data: InterviewDBFormData) {
+  async create(data: QuestionsFormData) {
     const response = await fetch('http://localhost:5000/api/interviewData/', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.getToken()}`,
+      },
+      body: JSON.stringify(data),
+    });
+    this.checkAuth(response);
+    return response;
+  }
+
+  async update(data: QuestionsFormData & { _id: string }) {
+    const response = await fetch('http://localhost:5000/api/interviewData/', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.getToken()}`,

@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import TasksApi from 'app/api/tasksApiSlice';
 import { Task, TasksFormData } from 'app/types';
-import { isArray } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -27,7 +26,7 @@ export const EditDataForm = ({
   isOpen: boolean;
   onClose: () => void;
   dataFetch: () => Promise<void>;
-  task: Task | [];
+  task?: Task;
 }) => {
   const {
     register,
@@ -38,7 +37,7 @@ export const EditDataForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isArray(task)) {
+    if (task) {
       reset({
         title: task.title,
         shortDescription: task.shortDescription,
@@ -56,7 +55,7 @@ export const EditDataForm = ({
   const onSubmit = async (data: TasksFormData) => {
     try {
       setIsSubmitting(true);
-      const response = !isArray(task)
+      const response = task
         ? await TasksApi.update({ _id: task._id, ...data })
         : await TasksApi.create(data);
       setIsSubmitting(false);
@@ -125,7 +124,7 @@ export const EditDataForm = ({
                 loadingText="Submitting"
                 disabled={isSubmitting}
               >
-                {!isArray(task) ? 'Edit task' : 'Add task'}
+                {task ? 'Edit task' : 'Add task'}
               </Button>
             </Stack>
           </form>
