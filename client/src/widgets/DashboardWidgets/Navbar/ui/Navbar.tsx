@@ -1,0 +1,38 @@
+import { Button } from '@chakra-ui/react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import * as S from './Navbar.styled';
+
+export const Navbar = () => {
+  const navigate = useNavigate();
+
+  return (
+    <S.Navbar>
+      <Button
+        onClick={() => navigate('/dashboard/questions')}
+        colorScheme="blue"
+        variant="ghost"
+      >
+        Questions
+      </Button>
+      <Button
+        onClick={() => navigate('/dashboard/tasks')}
+        colorScheme="blue"
+        variant="ghost"
+      >
+        Tasks
+      </Button>
+      <Button
+        onClick={() => {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }}
+        colorScheme="blue"
+        variant="ghost"
+      >
+        Logout
+      </Button>
+    </S.Navbar>
+  );
+};
