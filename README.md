@@ -2,7 +2,7 @@
 # Task-manager
 ## Используемые технологии:
 
-### Client:
+### Client (архитектура FSD):
 - [Vite](https://github.com/vitejs/vite)
 - [React](https://reactjs.org/)
 - [Typescript](https://www.typescriptlang.org/)
