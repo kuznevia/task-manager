@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Question } from 'widgets/DashboardWidgets/Questions/model/questionsTypes';
 
-export const QuestionDetails = ({
+export const QuestionDetailsModal = ({
   isOpen,
   onClose,
   onEdit,

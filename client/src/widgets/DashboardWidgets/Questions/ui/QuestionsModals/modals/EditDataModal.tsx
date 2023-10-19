@@ -18,7 +18,7 @@ import {
   QuestionsFormData,
 } from 'widgets/DashboardWidgets/Questions/model/questionsTypes';
 
-export const EditDataForm = ({
+export const EditDataModal = ({
   isOpen,
   onClose,
   dataFetch,

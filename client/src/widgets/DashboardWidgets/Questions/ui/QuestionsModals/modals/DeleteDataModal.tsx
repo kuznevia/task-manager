@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import InterviewApi from 'widgets/DashboardWidgets/Questions/api/questionsApiSlice';
 
-export const DeleteDataForm = ({
+export const DeleteDataModal = ({
   isOpen,
   onClose,
   dataFetch,

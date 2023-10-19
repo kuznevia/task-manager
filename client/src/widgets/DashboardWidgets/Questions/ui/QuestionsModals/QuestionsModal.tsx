@@ -1,8 +1,8 @@
 import React from 'react';
-import { Task } from 'widgets/DashboardWidgets/Tasks/model/tasksTypes';
-import { DeleteDataModal } from 'widgets/DashboardWidgets/Tasks/ui/TasksModals/modals/DeleteDataModal';
-import { EditDataModal } from 'widgets/DashboardWidgets/Tasks/ui/TasksModals/modals/EditDataModal';
-import { TaskDetailsModal } from 'widgets/DashboardWidgets/Tasks/ui/TasksModals/modals/TaskDetailsModal';
+import { Question } from 'widgets/DashboardWidgets/Questions/model/questionsTypes';
+import { DeleteDataModal } from 'widgets/DashboardWidgets/Questions/ui/QuestionsModals/modals/DeleteDataModal';
+import { EditDataModal } from 'widgets/DashboardWidgets/Questions/ui/QuestionsModals/modals/EditDataModal';
+import { QuestionDetailsModal } from 'widgets/DashboardWidgets/Questions/ui/QuestionsModals/modals/QuestionDetailsModal';
 
 type Props = {
   disclousureProps: {
@@ -16,16 +16,16 @@ type Props = {
     onDetailsModalOpen: () => void;
     onDetailsModalClose: () => void;
   };
-  tasksProps: {
+  questionsProps: {
     deletingId: string;
-    editingTask?: Task;
+    editingQuestion?: Question;
     dataFetch: () => Promise<void>;
-    setEditingTask: React.Dispatch<React.SetStateAction<Task | undefined>>;
+    setEditingQuestion: React.Dispatch<React.SetStateAction<Question | undefined>>;
     setDeletingId: React.Dispatch<React.SetStateAction<string>>;
   };
 };
 
-export const TasksModal = ({ disclousureProps, tasksProps }: Props) => {
+export const QuestionsModal = ({ disclousureProps, questionsProps }: Props) => {
   const {
     isEditFormOpen,
     onEditFormOpen,
@@ -36,15 +36,16 @@ export const TasksModal = ({ disclousureProps, tasksProps }: Props) => {
     isDetailsModalOpen,
     onDetailsModalClose,
   } = disclousureProps;
-  const { deletingId, editingTask, dataFetch, setDeletingId, setEditingTask } =
-    tasksProps;
+
+  const { deletingId, editingQuestion, dataFetch, setDeletingId, setEditingQuestion } =
+    questionsProps;
   return (
     <>
       <EditDataModal
         isOpen={isEditFormOpen}
         onClose={onEditFormClose}
         dataFetch={dataFetch}
-        task={editingTask}
+        question={editingQuestion}
       />
       <DeleteDataModal
         isOpen={isDeleteFormOpen}
@@ -52,16 +53,16 @@ export const TasksModal = ({ disclousureProps, tasksProps }: Props) => {
         dataFetch={dataFetch}
         deletingId={deletingId}
       />
-      <TaskDetailsModal
-        task={editingTask}
+      <QuestionDetailsModal
+        question={editingQuestion}
         isOpen={isDetailsModalOpen}
         onEdit={() => {
-          setEditingTask(editingTask);
+          setEditingQuestion(editingQuestion);
           onEditFormOpen();
           onDetailsModalClose();
         }}
         onDelete={() => {
-          setDeletingId(editingTask ? editingTask._id : '');
+          setDeletingId(editingQuestion ? editingQuestion._id : '');
           onDeleteFormOpen();
           onDetailsModalClose();
         }}

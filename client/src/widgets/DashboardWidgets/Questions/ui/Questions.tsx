@@ -1,45 +1,22 @@
-import { Button, Heading, useDisclosure } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import QuestionsApi from 'widgets/DashboardWidgets/Questions/api/questionsApiSlice';
-import { Question } from 'widgets/DashboardWidgets/Questions/model/questionsTypes';
-import { DeleteDataForm } from 'widgets/DashboardWidgets/Questions/ui/QuestionsForms/DeleteDataForm';
-import { EditDataForm } from 'widgets/DashboardWidgets/Questions/ui/QuestionsForms/EditDataForm';
+import { Button, Heading } from '@chakra-ui/react';
+import { NestedAccrodions } from 'widgets/DashboardWidgets/Questions/ui/Accordions/NestedAccordions';
+import { useModal } from 'widgets/DashboardWidgets/Questions/ui/hooks/useModal';
+import { useQuestions } from 'widgets/DashboardWidgets/Questions/ui/hooks/useQuestions';
+import { QuestionsModal } from 'widgets/DashboardWidgets/Questions/ui/QuestionsModals/QuestionsModal';
 
-import { NestedAccrodions } from './Accordions/NestedAccordions';
-import { QuestionDetails } from './QuestionDetails';
 import * as S from './Questions.styled';
 
 export const Questions = () => {
-  const [data, setData] = useState<Question[]>([]);
-  const [deletingId, setDeletingId] = useState('');
-  const [editingQuestion, setEditingQuestion] = useState<Question>();
   const {
-    isOpen: isEditFormOpen,
-    onOpen: onEditFormOpen,
-    onClose: onEditFormClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDeleteFormOpen,
-    onOpen: onDeleteFormOpen,
-    onClose: onDeleteFormClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDetailsModalOpen,
-    onOpen: onDetailsModalOpen,
-    onClose: onDetailsModalClose,
-  } = useDisclosure();
+    data,
+    deletingId,
+    editingQuestion,
+    setDeletingId,
+    setEditingQuestion,
+    dataFetch,
+  } = useQuestions();
 
-  useEffect(() => {
-    dataFetch();
-  }, []);
-
-  const dataFetch = async () => {
-    const response = await QuestionsApi.getAll();
-    if (response.status === 200) {
-      const data: Question[] = await response.json();
-      setData(data);
-    }
-  };
+  const { disclousureProps } = useModal();
 
   return (
     <>
@@ -49,38 +26,21 @@ export const Questions = () => {
           data={data}
           groupKey="group"
           setDeletingId={setDeletingId}
-          onDeleteFormOpen={onDeleteFormOpen}
+          onDeleteFormOpen={disclousureProps.onDeleteFormOpen}
           setEditingQuestion={setEditingQuestion}
-          onDetailsModalOpen={onDetailsModalOpen}
+          onDetailsModalOpen={disclousureProps.onDetailsModalOpen}
         />
-        <Button onClick={onEditFormOpen}>Add data</Button>
+        <Button onClick={disclousureProps.onEditFormOpen}>Add data</Button>
       </S.Questions>
-      <EditDataForm
-        isOpen={isEditFormOpen}
-        onClose={onEditFormClose}
-        dataFetch={dataFetch}
-        question={editingQuestion}
-      />
-      <DeleteDataForm
-        isOpen={isDeleteFormOpen}
-        onClose={onDeleteFormClose}
-        dataFetch={dataFetch}
-        deletingId={deletingId}
-      />
-      <QuestionDetails
-        question={editingQuestion}
-        isOpen={isDetailsModalOpen}
-        onEdit={() => {
-          setEditingQuestion(editingQuestion);
-          onEditFormOpen();
-          onDetailsModalClose();
+      <QuestionsModal
+        disclousureProps={disclousureProps}
+        questionsProps={{
+          deletingId,
+          editingQuestion,
+          dataFetch,
+          setEditingQuestion,
+          setDeletingId,
         }}
-        onDelete={() => {
-          setDeletingId(editingQuestion ? editingQuestion._id : '');
-          onDeleteFormOpen();
-          onDetailsModalClose();
-        }}
-        onClose={onDetailsModalClose}
       />
     </>
   );
