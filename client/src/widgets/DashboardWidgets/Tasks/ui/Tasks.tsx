@@ -8,50 +8,27 @@ import {
   Flex,
   Heading,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { todayString } from 'shared/helpers/date';
-import TasksApi from 'widgets/DashboardWidgets/Tasks/api/tasksApiSlice';
-import { Task } from 'widgets/DashboardWidgets/Tasks/model/tasksTypes';
-import { DeleteDataForm } from 'widgets/DashboardWidgets/Tasks/ui/TaskListForms/DeleteDataForm';
-import { EditDataForm } from 'widgets/DashboardWidgets/Tasks/ui/TaskListForms/EditDataForm';
+import { useModal } from 'widgets/DashboardWidgets/Tasks/hooks/useModal';
+import { useTasks } from 'widgets/DashboardWidgets/Tasks/hooks/useTasks';
+import { TasksModal } from 'widgets/DashboardWidgets/Tasks/ui/TasksModals/TasksModal';
 
-import { TaskDetails } from './TaskDetails';
 import * as S from './Tasks.styled';
 
 export const Tasks = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [deletingId, setDeletingId] = useState('');
-  const [editingTask, setEditingTask] = useState<Task>();
-  const [isTodayTasks, setIsTodaytasks] = useState(false);
   const {
-    isOpen: isEditFormOpen,
-    onOpen: onEditFormOpen,
-    onClose: onEditFormClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDeleteFormOpen,
-    onOpen: onDeleteFormOpen,
-    onClose: onDeleteFormClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDetailsModalOpen,
-    onOpen: onDetailsModalOpen,
-    onClose: onDetailsModalClose,
-  } = useDisclosure();
+    tasks,
+    deletingId,
+    setDeletingId,
+    editingTask,
+    setEditingTask,
+    isTodayTasks,
+    setIsTodaytasks,
+    dataFetch,
+  } = useTasks();
 
-  useEffect(() => {
-    dataFetch();
-  }, []);
-
-  const dataFetch = async () => {
-    const response = await TasksApi.getAll();
-    if (response.status === 200) {
-      const data: Task[] = await response.json();
-      setTasks(data);
-    }
-  };
+  const { disclousureProps } = useModal();
 
   const filteredTasks = isTodayTasks
     ? tasks.filter((task) => task.shortDescription?.includes(todayString))
@@ -76,7 +53,7 @@ export const Tasks = () => {
                   colorScheme="blue"
                   onClick={() => {
                     setEditingTask(task);
-                    onDetailsModalOpen();
+                    disclousureProps.onDetailsModalOpen();
                   }}
                   size="sm"
                 >
@@ -87,7 +64,7 @@ export const Tasks = () => {
                   colorScheme="blue"
                   onClick={() => {
                     setEditingTask(task);
-                    onEditFormOpen();
+                    disclousureProps.onEditFormOpen();
                   }}
                   size="sm"
                 >
@@ -98,7 +75,7 @@ export const Tasks = () => {
                   colorScheme="blue"
                   onClick={() => {
                     setDeletingId(task._id);
-                    onDeleteFormOpen();
+                    disclousureProps.onDeleteFormOpen();
                   }}
                   size="sm"
                 >
@@ -113,7 +90,7 @@ export const Tasks = () => {
         <Button
           onClick={() => {
             setEditingTask(undefined);
-            onEditFormOpen();
+            disclousureProps.onEditFormOpen();
           }}
         >
           Add task
@@ -126,32 +103,9 @@ export const Tasks = () => {
           {isTodayTasks ? 'Get all tasks' : 'Get today tasks'}
         </Button>
       </ButtonGroup>
-      <EditDataForm
-        isOpen={isEditFormOpen}
-        onClose={onEditFormClose}
-        dataFetch={dataFetch}
-        task={editingTask}
-      />
-      <DeleteDataForm
-        isOpen={isDeleteFormOpen}
-        onClose={onDeleteFormClose}
-        dataFetch={dataFetch}
-        deletingId={deletingId}
-      />
-      <TaskDetails
-        task={editingTask}
-        isOpen={isDetailsModalOpen}
-        onEdit={() => {
-          setEditingTask(editingTask);
-          onEditFormOpen();
-          onDetailsModalClose();
-        }}
-        onDelete={() => {
-          setDeletingId(editingTask ? editingTask._id : '');
-          onDeleteFormOpen();
-          onDetailsModalClose();
-        }}
-        onClose={onDetailsModalClose}
+      <TasksModal
+        disclousureProps={disclousureProps}
+        tasksProps={{ deletingId, editingTask, dataFetch, setEditingTask, setDeletingId }}
       />
     </S.Tasks>
   );

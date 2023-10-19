@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import TasksApi from 'widgets/DashboardWidgets/Tasks/api/tasksApiSlice';
 
-export const DeleteDataForm = ({
+export const DeleteDataModal = ({
   isOpen,
   onClose,
   dataFetch,

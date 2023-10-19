@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import TasksApi from 'widgets/DashboardWidgets/Tasks/api/tasksApiSlice';
 import { Task, TasksFormData } from 'widgets/DashboardWidgets/Tasks/model/tasksTypes';
 
-export const EditDataForm = ({
+export const EditDataModal = ({
   isOpen,
   onClose,
   dataFetch,

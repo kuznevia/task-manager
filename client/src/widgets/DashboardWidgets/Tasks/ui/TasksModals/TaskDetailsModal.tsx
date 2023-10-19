@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Task } from 'widgets/DashboardWidgets/Tasks/model/tasksTypes';
 
-export const TaskDetails = ({
+export const TaskDetailsModal = ({
   isOpen,
   onClose,
   onEdit,
