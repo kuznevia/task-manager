@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RoutePath } from 'shared/config/routeConfig';
 
 import * as S from './Navbar.styled';
 
@@ -10,14 +10,14 @@ export const Navbar = () => {
   return (
     <S.Navbar>
       <Button
-        onClick={() => navigate('/dashboard/questions')}
+        onClick={() => navigate(RoutePath.dashboard('questions'))}
         colorScheme="blue"
         variant="ghost"
       >
         Questions
       </Button>
       <Button
-        onClick={() => navigate('/dashboard/tasks')}
+        onClick={() => navigate(RoutePath.dashboard('tasks'))}
         colorScheme="blue"
         variant="ghost"
       >
@@ -26,7 +26,7 @@ export const Navbar = () => {
       <Button
         onClick={() => {
           localStorage.removeItem('token');
-          navigate('/login');
+          navigate(RoutePath.login());
         }}
         colorScheme="blue"
         variant="ghost"

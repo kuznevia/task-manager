@@ -1,27 +1,20 @@
 import { Button, Heading, Input, Stack, Text } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-
-type FormData = {
-  email: string;
-};
+import { AuthHeaders } from 'pages/AuthPage/model/authEnums';
+import { RoutePath } from 'shared/config/routeConfig';
+import { useInputProps } from 'shared/hooks/useInputProps';
+import { useRestorePassowrd } from 'widgets/AuthWidgets/RestorePassword/hooks/useRestorePassowrd';
 
 export const RestorePassword = () => {
+  const { methods, navigate, onSubmit } = useRestorePassowrd();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
-  const navigate = useNavigate();
-
-  const onSubmit = (data: FormData) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-  };
+  } = methods;
 
   return (
     <>
-      <Heading>Restore password</Heading>
+      <Heading>{AuthHeaders.RESTORE_PASSWORD}</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
           <Input
@@ -29,11 +22,7 @@ export const RestorePassword = () => {
               validate: (value) => value.includes('@') && value.includes('.'),
               required: true,
             })}
-            errorBorderColor="red.300"
-            focusBorderColor={errors.email && 'red.300'}
-            placeholder={errors.email ? 'Email is required' : 'Enter email'}
-            isInvalid={errors.email ? true : false}
-            _placeholder={{ color: errors.email && 'red.300' }}
+            {...useInputProps('email', 'Enter email', 'Email is required', errors)}
           />
           {errors.email?.type === 'validate' && (
             <Text fontSize="md" color="red.300">
@@ -43,7 +32,7 @@ export const RestorePassword = () => {
           <Button colorScheme="blue" type="submit">
             Restore
           </Button>
-          <Button onClick={() => navigate('/login')}>Go to login page</Button>
+          <Button onClick={() => navigate(RoutePath.login())}>Go to login page</Button>
         </Stack>
       </form>
     </>

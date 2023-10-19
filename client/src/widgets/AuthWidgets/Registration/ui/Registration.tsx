@@ -7,60 +7,34 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import AuthApi from 'widgets/AuthWidgets/api/authApiSlice';
-
-type FormData = {
-  email: string;
-  pass: string;
-  confirmPass: string;
-};
+import { AuthHeaders } from 'pages/AuthPage/model/authEnums';
+import { useInputProps } from 'shared/hooks/useInputProps';
+import { useRegistration } from 'widgets/AuthWidgets/Registration/hooks/useRegistration';
 
 export const Registration = () => {
-  const [showPass, setShowPass] = useState(false);
-  const [showPassConfirmation, setShowPassConfirmation] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    showPass,
+    showPassConfirmation,
+    setShowPass,
+    setShowPassConfirmation,
+    isSubmitting,
+    methods,
+    onSubmit,
+    navigate,
+  } = useRegistration();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormData>();
-  const navigate = useNavigate();
-
-  const onSubmit = async (data: FormData) => {
-    const userData = {
-      username: data.email,
-      password: data.pass,
-    };
-
-    try {
-      setIsSubmitting(true);
-      const response = await AuthApi.register(userData);
-      setIsSubmitting(false);
-      if (response.status === 200) {
-        const { token } = await response.json();
-        localStorage.setItem('token', token);
-        navigate('/dashboard');
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(await response.json());
-        setShowPass(true);
-        setShowPassConfirmation(true);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  };
+  } = methods;
 
   const pass = watch('pass');
 
   return (
     <>
-      <Heading>Sing up</Heading>
+      <Heading>{AuthHeaders.REGISTRATION}</Heading>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Stack spacing={3}>
           <Input
@@ -68,11 +42,7 @@ export const Registration = () => {
               validate: (value) => value.includes('@') && value.includes('.'),
               required: true,
             })}
-            errorBorderColor="red.300"
-            focusBorderColor={errors.email && 'red.300'}
-            placeholder={errors.email ? 'Email is required' : 'Enter email'}
-            isInvalid={errors.email ? true : false}
-            _placeholder={{ color: errors.email && 'red.300' }}
+            {...useInputProps('email', 'Enter email', 'Email is required', errors)}
           />
           {errors.email?.type === 'validate' && (
             <Text fontSize="md" color="red.300">
@@ -85,14 +55,10 @@ export const Registration = () => {
                 validate: (value) => value.length > 3 && value.length < 11,
                 required: true,
               })}
-              errorBorderColor="red.300"
-              focusBorderColor={errors.pass && 'red.300'}
+              {...useInputProps('pass', 'Enter password', 'Password is required', errors)}
               pr="4.5rem"
               type={showPass ? 'text' : 'password'}
-              placeholder={errors.pass ? 'Password is required' : 'Enter password'}
               aria-invalid={errors.pass ? 'true' : 'false'}
-              isInvalid={errors.pass ? true : false}
-              _placeholder={{ color: errors.pass && 'red.300' }}
             />
             <InputRightElement width="4.5rem">
               <Button h="1.75rem" size="sm" onClick={() => setShowPass(!showPass)}>
@@ -115,16 +81,15 @@ export const Registration = () => {
                 },
                 required: true,
               })}
-              errorBorderColor="red.300"
-              focusBorderColor={errors.confirmPass && 'red.300'}
+              {...useInputProps(
+                'confirmPass',
+                'Confirm password',
+                'Password is required',
+                errors,
+              )}
               pr="4.5rem"
               type={showPassConfirmation ? 'text' : 'password'}
-              placeholder={
-                errors.confirmPass ? 'Password is required' : 'Confirm password'
-              }
               aria-invalid={errors.confirmPass ? 'true' : 'false'}
-              isInvalid={errors.confirmPass ? true : false}
-              _placeholder={{ color: errors.confirmPass && 'red.300' }}
             />
             <InputRightElement width="4.5rem">
               <Button
